@@ -1,6 +1,7 @@
 # *.iml
 # .idea/
 /out/
+/target/
 
 *.class
 

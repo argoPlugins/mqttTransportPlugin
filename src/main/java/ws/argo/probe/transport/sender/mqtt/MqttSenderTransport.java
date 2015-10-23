@@ -1,13 +1,10 @@
 package ws.argo.probe.transport.sender.mqtt;
 
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import ws.argo.plugin.transport.sender.Transport;
-import ws.argo.plugin.transport.sender.TransportConfigException;
-import ws.argo.plugin.transport.sender.TransportException;
+import ws.argo.plugin.transport.exception.TransportConfigException;
+import ws.argo.plugin.transport.exception.TransportException;
 import ws.argo.probe.Probe;
 import ws.argo.probe.ProbeSenderException;
 
@@ -30,13 +27,13 @@ public class MqttSenderTransport implements Transport {
     private static final Logger LOGGER = Logger.getLogger(MqttSenderTransport.class.getName());
 
     // Properties
-    private String _topic = "MQTT Examples";
-    private int _qos = 2;
-    private String _broker = "tcp://localhost:1883";
-    private String _clientId = "JavaSample";
+    private String _topic;
+    private int _qos;
+    private String _broker;
+    private String _clientId;
     private MemoryPersistence _persistence;
     private MqttClient _mqttClient;
-
+    private MqttConnectOptions _connOpts;
 
     /**
      * Initialize the transport with the values provided in the Properties object.
@@ -59,7 +56,7 @@ public class MqttSenderTransport implements Transport {
             _qos = 0;
         }
         _broker = p.getProperty("broker");
-        _clientId = p.getProperty("clientID", "NO CLIENT ID");
+        _clientId = p.getProperty("clientId", "NO CLIENT ID");
 
         if (_broker == null) {
             throw new TransportConfigException("The broker MUST be configured correctly");
@@ -70,6 +67,7 @@ public class MqttSenderTransport implements Transport {
         }
 
         createMQTTConnection();
+
 
     }
 
@@ -85,9 +83,16 @@ public class MqttSenderTransport implements Transport {
         try {
             MqttMessage message = new MqttMessage(probe.asXML().getBytes());
             message.setQos(_qos);
+            message.setRetained(false);
 
+            MqttTopic topic = _mqttClient.getTopic(_topic);
+
+            MqttDeliveryToken token;
             try {
-                _mqttClient.publish(_topic, message);
+//                _mqttClient.publish(_topic, message);
+                token = topic.publish(message);
+                // Wait until the message has been delivered to the broker
+//                token.waitForCompletion(); // might want a timeout here
             } catch (MqttException e) {
                 throw new TransportException("Error publishing message to broker [" + _broker + "]", e);
             }
@@ -130,12 +135,19 @@ public class MqttSenderTransport implements Transport {
     }
 
     private void createMQTTConnection() throws TransportConfigException {
+        _connOpts = new MqttConnectOptions();
+
+        _connOpts.setCleanSession(true);
+        _connOpts.setKeepAliveInterval(30);
+//        connOpt.setUserName(M2MIO_USERNAME);
+//        connOpt.setPassword(M2MIO_PASSWORD_MD5.toCharArray());
+
         try {
+
             _mqttClient = new MqttClient(_broker, _clientId, _persistence);
-            MqttConnectOptions connOpts = new MqttConnectOptions();
-            connOpts.setCleanSession(true);
             LOGGER.fine("Connecting to broker [" + _broker + "]");
-            _mqttClient.connect(connOpts);
+            _mqttClient.connect(_connOpts);
+
             LOGGER.fine("Connected MQTT Client [" + _clientId + "] to broker [" + _broker + "]");
         } catch (MqttException me) {
             throw new TransportConfigException("Error connecting [" + _clientId + "] broker [" + _broker + "]", me);

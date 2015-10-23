@@ -8,6 +8,26 @@
     <artifactId>mqttTransportPlugin</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <licenses>
+        <license>
+            <name>The MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>jmsimpson68</id>
+            <name>Jeff Simpson</name>
+            <email>jmsimpson68@gmail.com</email>
+            <roles>
+                <role>Build Master</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
+
     <repositories>
         <repository>
             <id>paho-mqtt-client</id>
@@ -19,9 +39,24 @@
     <properties>
         <paho.version>1.0.2</paho.version>
         <argo.version>0.4.1-SNAPSHOT</argo.version>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>commons-configuration</groupId>
+            <artifactId>commons-configuration</artifactId>
+            <version>1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.4.1</version>
+        </dependency>
 
         <dependency>
             <groupId>ws.argo.plugin</groupId>
@@ -39,8 +74,28 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>ws.argo.probe</groupId>
+            <artifactId>ProbeSender</artifactId>
+            <version>0.4.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>
