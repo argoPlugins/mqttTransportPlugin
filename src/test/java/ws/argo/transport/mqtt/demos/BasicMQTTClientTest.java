@@ -1,4 +1,4 @@
-package ws.argo.probe.transport.sender.mqtt;
+package ws.argo.transport.mqtt.demos;
 
 
 
