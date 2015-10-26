@@ -19,11 +19,11 @@
 
 
 <mqttTransport>
-    <!--<resolveIP name="test" type="uri">https://api.ipify.org</resolveIP>-->
 
     <mqttTopic>ws.argo/test</mqttTopic>
     <qos>0</qos>
-    <broker>tcp://localhost:1883</broker>
+    <!--<broker>tcp://localhost:1883</broker>-->
+    <broker>tcp://ec2-52-91-87-184.compute-1.amazonaws.com:1883</broker>
     <clientId>testResponderTransport</clientId>
 
 </mqttTransport>

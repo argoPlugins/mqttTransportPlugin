@@ -1,6 +1,30 @@
+/*
+ * Copyright 2015 Jeff Simpson.
+ *
+ * This file is part of the Argo MQTT Transport plugin.
+ *
+ * Argo MQTT Transport plugin is free software: you can redistribute it
+ * and/or modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * Foobar is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ws.argo.probe.transport.sender.mqtt;
 
-import org.eclipse.paho.client.mqttv3.*;
+import org.eclipse.paho.client.mqttv3.MqttClient;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
+import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
+import org.eclipse.paho.client.mqttv3.MqttTopic;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import ws.argo.plugin.transport.sender.Transport;
 import ws.argo.plugin.transport.exception.TransportConfigException;
@@ -12,7 +36,6 @@ import javax.xml.bind.JAXBException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.parseInt;
 
 /**
@@ -27,7 +50,8 @@ public class MqttSenderTransport implements Transport {
     private static final Logger LOGGER = Logger.getLogger(MqttSenderTransport.class.getName());
 
     // Properties
-    private String _topic;
+    private String _topicName;
+    private MqttTopic _topic;
     private int _qos;
     private String _broker;
     private String _clientId;
@@ -46,9 +70,7 @@ public class MqttSenderTransport implements Transport {
 
         // we can ignore the network interface name here
 
-        _persistence = new MemoryPersistence();
-
-        _topic = p.getProperty("mqttTopic", DEFAULT_TOPIC);
+         _topicName = p.getProperty("mqttTopic", DEFAULT_TOPIC);
         try {
             _qos = parseInt(p.getProperty("qos", "0"));
         } catch (NumberFormatException e) {
@@ -62,12 +84,11 @@ public class MqttSenderTransport implements Transport {
             throw new TransportConfigException("The broker MUST be configured correctly");
         }
 
-        if (_topic.equals(DEFAULT_TOPIC)) {
+        if (_topicName.equals(DEFAULT_TOPIC)) {
             LOGGER.info("MQTT topic not defined.  Using the default MQTT Topic [" + DEFAULT_TOPIC + "]");
         }
 
         createMQTTConnection();
-
 
     }
 
@@ -85,14 +106,11 @@ public class MqttSenderTransport implements Transport {
             message.setQos(_qos);
             message.setRetained(false);
 
-            MqttTopic topic = _mqttClient.getTopic(_topic);
-
             MqttDeliveryToken token;
             try {
-//                _mqttClient.publish(_topic, message);
-                token = topic.publish(message);
+                token = _topic.publish(message);
                 // Wait until the message has been delivered to the broker
-//                token.waitForCompletion(); // might want a timeout here
+                token.waitForCompletion(); // might want a timeout here
             } catch (MqttException e) {
                 throw new TransportException("Error publishing message to broker [" + _broker + "]", e);
             }
@@ -142,11 +160,15 @@ public class MqttSenderTransport implements Transport {
 //        connOpt.setUserName(M2MIO_USERNAME);
 //        connOpt.setPassword(M2MIO_PASSWORD_MD5.toCharArray());
 
+        _persistence = new MemoryPersistence();
+
         try {
 
             _mqttClient = new MqttClient(_broker, _clientId, _persistence);
             LOGGER.fine("Connecting to broker [" + _broker + "]");
             _mqttClient.connect(_connOpts);
+
+            _topic = _mqttClient.getTopic(_topicName);
 
             LOGGER.fine("Connected MQTT Client [" + _clientId + "] to broker [" + _broker + "]");
         } catch (MqttException me) {

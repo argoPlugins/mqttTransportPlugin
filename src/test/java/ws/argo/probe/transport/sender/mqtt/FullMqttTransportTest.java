@@ -88,7 +88,8 @@ public class FullMqttTransportTest {
 
         Properties senderProps = new Properties();
         senderProps.put("mqttTopic", "ws.argo/test");
-        senderProps.put("broker", "tcp://localhost:1883");
+//        senderProps.put("broker", "tcp://localhost:1883");
+        senderProps.put("broker", "tcp://ec2-52-91-87-184.compute-1.amazonaws.com:1883");
         senderProps.put("clientId", clientId);
 
         transport.initialize(senderProps, "");
@@ -99,6 +100,13 @@ public class FullMqttTransportTest {
 
         probe.setClientID(clientId);
         sender.sendProbe(probe);
+
+        // Sleep is here to make sure that the MQTT server has enough time to send the payload back
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         sender.close();
         responderTransport.shutdown();

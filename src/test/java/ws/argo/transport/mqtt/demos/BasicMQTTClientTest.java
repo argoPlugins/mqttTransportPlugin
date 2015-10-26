@@ -12,7 +12,8 @@ public class BasicMQTTClientTest implements MqttCallback {
     MqttClient myClient;
     MqttConnectOptions connOpt;
 
-    static final String BROKER_URL = "tcp://localhost:1883";
+//    static final String BROKER_URL = "tcp://localhost:1883";
+    static final String BROKER_URL = "tcp://ec2-52-91-87-184.compute-1.amazonaws.com:1883";
     static final String M2MIO_DOMAIN = "ws.argo";
     static final String M2MIO_STUFF = "things";
     static final String M2MIO_THING = "xxxx";
