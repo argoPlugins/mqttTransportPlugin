@@ -62,6 +62,4 @@ public class MqttSenderTransportTest {
         sender.close();
     }
 
-
-
 }

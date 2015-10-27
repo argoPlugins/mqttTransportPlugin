@@ -88,9 +88,11 @@ public class FullMqttTransportTest {
 
         Properties senderProps = new Properties();
         senderProps.put("mqttTopic", "ws.argo/test");
-//        senderProps.put("broker", "tcp://localhost:1883");
-        senderProps.put("broker", "tcp://ec2-52-91-87-184.compute-1.amazonaws.com:1883");
+        senderProps.put("broker", "tcp://localhost:1883");
+//        senderProps.put("broker", "tcp://ec2-52-91-87-184.compute-1.amazonaws.com:1883");
         senderProps.put("clientId", clientId);
+        senderProps.put("username", "admin");
+        senderProps.put("password", "1luvg0lf");
 
         transport.initialize(senderProps, "");
         ProbeSender sender = new ProbeSender(transport);

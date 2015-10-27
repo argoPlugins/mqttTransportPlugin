@@ -50,6 +50,8 @@ public class MqttResponderTransport implements Transport, MqttCallback {
     private int _qos;
     private String _broker;
     private String _clientId;
+    private String _username;
+    private String _password;
     private int _keepAliveInterval;
     private MemoryPersistence _persistence;
     private MqttClient _mqttClient;
@@ -181,6 +183,9 @@ public class MqttResponderTransport implements Transport, MqttCallback {
             LOGGER.info("MQTT topic not defined.  Using the default MQTT Topic [" + DEFAULT_TOPIC + "]");
         }
 
+        _username = config.getString("username");
+        _password = config.getString("password");
+
     }
 
 
@@ -189,10 +194,11 @@ public class MqttResponderTransport implements Transport, MqttCallback {
 
         _connOpts.setCleanSession(true);
         _connOpts.setKeepAliveInterval(30);
-        /*
-        connOpt.setUserName(username);
-        connOpt.setPassword(password_md5.toCharArray());
-        */
+
+        if (_username != null && !_username.isEmpty())
+            _connOpts.setUserName(_username);
+        if (_password != null && !_password.isEmpty())
+            _connOpts.setPassword(_password.toCharArray());
 
         _persistence = new MemoryPersistence();
 

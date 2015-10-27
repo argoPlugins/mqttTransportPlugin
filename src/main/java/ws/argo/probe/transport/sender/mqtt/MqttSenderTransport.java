@@ -55,6 +55,8 @@ public class MqttSenderTransport implements Transport {
     private int _qos;
     private String _broker;
     private String _clientId;
+    private String _username;
+    private String _password;
     private MemoryPersistence _persistence;
     private MqttClient _mqttClient;
     private MqttConnectOptions _connOpts;
@@ -70,7 +72,13 @@ public class MqttSenderTransport implements Transport {
 
         // we can ignore the network interface name here
 
-         _topicName = p.getProperty("mqttTopic", DEFAULT_TOPIC);
+        processProperties(p);
+        createMQTTConnection();
+
+    }
+
+    private void processProperties(Properties p) throws TransportConfigException {
+        _topicName = p.getProperty("mqttTopic", DEFAULT_TOPIC);
         try {
             _qos = parseInt(p.getProperty("qos", "0"));
         } catch (NumberFormatException e) {
@@ -88,8 +96,8 @@ public class MqttSenderTransport implements Transport {
             LOGGER.info("MQTT topic not defined.  Using the default MQTT Topic [" + DEFAULT_TOPIC + "]");
         }
 
-        createMQTTConnection();
-
+        _username = p.getProperty("username");
+        _password = p.getProperty("password");
     }
 
     /**
@@ -157,8 +165,11 @@ public class MqttSenderTransport implements Transport {
 
         _connOpts.setCleanSession(true);
         _connOpts.setKeepAliveInterval(30);
-//        connOpt.setUserName(M2MIO_USERNAME);
-//        connOpt.setPassword(M2MIO_PASSWORD_MD5.toCharArray());
+
+        if (_username != null && !_username.isEmpty())
+            _connOpts.setUserName(_username);
+        if (_password != null && !_password.isEmpty())
+            _connOpts.setPassword(_password.toCharArray());
 
         _persistence = new MemoryPersistence();
 
