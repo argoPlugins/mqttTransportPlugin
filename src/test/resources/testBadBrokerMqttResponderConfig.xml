@@ -19,11 +19,10 @@
 
 
 <mqttTransport>
-    <resolveIP name="test" type="uri">https://api.ipify.org</resolveIP>
-
-    <mqttTopic>/argo/test</mqttTopic>
+    <mqttTopic>ws.argo/test</mqttTopic>
     <qos>0</qos>
-    <broker></broker>
+    <broker>tcp://thisisabadbroker:1883</broker>
     <clientId>testResponderTransport</clientId>
-
+    <username>user</username>
+    <password>p@ssw0rd</password>
 </mqttTransport>

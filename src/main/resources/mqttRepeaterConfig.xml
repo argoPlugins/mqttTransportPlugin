@@ -19,7 +19,6 @@
 
 
 <mqttTransport>
-
     <mqttTopic>ws.argo/test</mqttTopic>
     <qos>0</qos>
     <broker>tcp://localhost:1883</broker>
