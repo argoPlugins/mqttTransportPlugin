@@ -16,7 +16,7 @@ The Argo runtime service discovery system utilizes a publish/subscribe messaging
 Installation should be painless.  In a nutshell:
 
 1. Download the plugin from the [Github release site](https://github.com/argoPlugins/mqttTransportPlugin/releases/latest).
-2. Copy the plugin `JAR` file and copy it into the `lib` directory of the Argo Responder and/or the Argo Command Line Client.  When you run the responder or the command line client, it will pick up any new `JAR` files in the `lib` directory.  The standard location for the `lib` directories on a Linux system for the Responder and Client are `/opt/argo/responder/lib` and `/opt/argo/client/lib` repectively.
+2. Copy the plugin `JAR` file and copy it into the __external plugin__ directory of the Argo Responder and/or the Argo Command Line Client.  When you run the responder or the command line client, it will pick up any new `JAR` files in the __external plugin__ directory.  The standard location for the `lib` directories on a Linux system for the Responder and Client are `/opt/argo/responder/lib/ext` and `/opt/argo/client/lib/ext` repectively.
 3. Install the configuration `XML` files (one for the Transport and one  for the Repeater) into the `config` directory of the Argo Responder.
 
 ##Configure the Argo Responder

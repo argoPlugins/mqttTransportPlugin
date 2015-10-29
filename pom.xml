@@ -6,12 +6,12 @@
 
     <groupId>ws.argo.plugin.transport.mqtt</groupId>
     <artifactId>mqttTransportPlugin</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <licenses>
         <license>
-            <name>The MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <name>GPL3 License</name>
+            <url>https://opensource.org/licenses/GPL-3.0</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -41,8 +41,8 @@
         <argo.version>0.4.1-SNAPSHOT</argo.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
 
     </properties>
 
@@ -102,19 +102,26 @@
                         </goals>
                         <configuration>
                             <artifactSet>
+                                <includes>
+                                    <include>org.eclipse.paho:org.eclipse.paho.client.mqttv3</include>
+                                    <include>commons-validator:commons-validator</include>
+                                    <include>ws.argo.probe:ProbeSender</include>
+                                </includes>
                                 <excludes>
-                                    <!--<exclude>ws.argo.plugin:PluginFramework</exclude>-->
-                                    <!--<exclude>commons-configuration:commons-configuration</exclude>-->
-                                    <exclude>commons-validator:commons-validator</exclude>
+                                    <exclude>commons-configuration:commons-configuration</exclude>
                                 </excludes>
+
                             </artifactSet>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <manifestEntries>
-                                        <Main-Class>ws.argo.responder.Responder</Main-Class>
-                                    </manifestEntries>
-                                </transformer>
-                            </transformers>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>

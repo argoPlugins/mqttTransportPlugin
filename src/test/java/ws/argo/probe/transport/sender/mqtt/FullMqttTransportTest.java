@@ -32,7 +32,7 @@ public class FullMqttTransportTest {
 
     @Test
     public void testFullTransportTest() throws UnknownHostException, SocketException, TransportConfigException, UnsupportedPayloadType, MalformedURLException, ProbeSenderException, TransportException {
-        ProbeProcessor probeProcessor = new ProbeProcessor() {
+        final ProbeProcessor probeProcessor = new ProbeProcessor() {
             @Override
             public void processProbe(ProbeWrapper probeWrapper) {
                 LOGGER.info("Probe Processor processing probe " + probeWrapper.getProbeId());
@@ -91,8 +91,8 @@ public class FullMqttTransportTest {
         senderProps.put("broker", "tcp://localhost:1883");
 //        senderProps.put("broker", "tcp://ec2-52-91-87-184.compute-1.amazonaws.com:1883");
         senderProps.put("clientId", clientId);
-        senderProps.put("username", "admin");
-        senderProps.put("password", "1luvg0lf");
+        senderProps.put("username", "user");
+        senderProps.put("password", "p@ssw0rd");
 
         transport.initialize(senderProps, "");
         ProbeSender sender = new ProbeSender(transport);

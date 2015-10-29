@@ -113,6 +113,11 @@ public class MqttRepeaterProbeHandlerPlugin implements ProbeHandlerPlugin {
 
     }
 
+    @Override
+    public String pluginName() {
+        return "MQTT Repeater";
+    }
+
     private void initializeProbeSender(Properties properties) throws UnknownHostException, SocketException, TransportConfigException {
         Transport transport = new MqttSenderTransport();
 

@@ -44,7 +44,7 @@ public class MqttRepeaterTest {
 
     @Test
     public void testMqttRepeater() throws ProbeHandlerConfigException, UnsupportedPayloadType, JAXBException, ProbeParseException {
-        ProbeProcessor probeProcessor = new ProbeProcessor() {
+        final ProbeProcessor probeProcessor = new ProbeProcessor() {
             @Override
             public void processProbe(ProbeWrapper probeWrapper) {
                 LOGGER.info("MqttRepeater Processor processing probe " + probeWrapper.getProbeId());
@@ -74,7 +74,7 @@ public class MqttRepeaterTest {
 
         final MqttResponderTransport responderTransport = new MqttResponderTransport();
 
-        Runnable responder = new Runnable() {
+        final Runnable responder = new Runnable() {
             @Override
             public void run() {
                 try {
