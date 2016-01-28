@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ws.argo.plugin.transport.mqtt</groupId>
   <artifactId>mqttTransportPlugin</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <developers>
     <developer>
       <id>jmsimpson68</id>
@@ -17,8 +17,8 @@
   </developers>
   <licenses>
     <license>
-      <name>The MIT License</name>
-      <url>http://www.opensource.org/licenses/mit-license.php</url>
+      <name>GPL3 License</name>
+      <url>https://opensource.org/licenses/GPL-3.0</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
