@@ -2,7 +2,7 @@
 
 Copyright (c) Jeff Simpson, 2015
 
-Licened under the GPL3 open source license.  Please see the LICENCE file for more information. 
+Licensed under the GPL3 open source license.  Please see the LICENCE file for more information. 
 
 These classes provide the Responder and Sender MQTT transports as well as the MQTT Repeater Probe Handler plugin.
 
@@ -16,14 +16,14 @@ The Argo runtime service discovery system utilizes a publish/subscribe messaging
 Installation should be painless.  In a nutshell:
 
 1. Download the plugin from the [Github release site](https://github.com/argoPlugins/mqttTransportPlugin/releases/latest).
-2. Copy the plugin `JAR` file and copy it into the __external plugin__ directory of the Argo Responder and/or the Argo Command Line Client.  When you run the responder or the command line client, it will pick up any new `JAR` files in the __external plugin__ directory.  The standard location for the `lib` directories on a Linux system for the Responder and Client are `/opt/argo/responder/lib/ext` and `/opt/argo/client/lib/ext` repectively.
+2. Copy the plugin `JAR` file and copy it into the __external plugin__ directory of the Argo Responder and/or the Argo Command Line Client.  When you run the responder or the command line client, it will pick up any new `JAR` files in the __external plugin__ directory.  The standard location for the `lib` directories on a Linux system for the Responder and Client are `/opt/argo/responder/lib/ext` and `/opt/argo/client/lib/ext` respectively.
 3. Install the configuration `XML` files (one for the Transport and one  for the Repeater) into the `config` directory of the Argo Responder.
 
 ##Configure the Argo Responder
-Adding the Transport plugin to the Argo Repsonder is pretty simple.
+Adding the Transport plugin to the Argo Responder is pretty simple.
 
-###Add the MQTT Responder Tranport to the Responder
-If you want to have your Argo Repsonder configured to recieive probes using MQTT, you’ll need to setup Argo to use the MQTT Transport.  After installing the jar file and the configuration files in the appropriate places, you’ll need to edit the main `responderConfig.xml` file.
+###Add the MQTT Responder Transport to the Responder
+If you want to have your Argo Responder configured to receive probes using MQTT, you’ll need to setup Argo to use the MQTT Transport.  After installing the jar file and the configuration files in the appropriate places, you’ll need to edit the main `responderConfig.xml` file.
 In the `<transports>` section, add the following transport configuration:
 
 ```xml
@@ -34,7 +34,7 @@ In the `<transports>` section, add the following transport configuration:
     
     <transport>
       <classname>ws.argo.probe.transport.responder.mqtt.MQTTResponderTransport</classname>
-      <configFilename>/opt/argo/responder/config/mqttTransportConfig.xml</configFilename>
+      <configFilename>/opt/argo/responder/config/mqttResponderTransportConfig.xml</configFilename>
     </transport>
     
     ...
@@ -42,10 +42,10 @@ In the `<transports>` section, add the following transport configuration:
   ...
 </responder>
 ```
-This will tell the Argo Responder to listen for incoming probes using the MQTT Tranport and will configure that transport according the the xml file.
+This will tell the Argo Responder to listen for incoming probes using the MQTT Transport and will configure that transport according the the xml file.
 
-###Configuring the MQTT Responder Tranport
-The configuration file for the MQTT Responder Tranport looks like this:
+###Configuring the MQTT Responder Transport
+The configuration file for the MQTT Responder Transport looks like this:
 
 ```xml
 <mqttTransport>
@@ -83,7 +83,7 @@ The Argo command line client can be configured to use the MQTT Transport to send
       <usesNI>false</usesNI>
       <requiresMulticast>false</requiresMulticast>
       <classname>ws.argo.probe.transport.sender.mqtt.MQTTSenderTransport</classname>
-      <configFilename>/opt/argo/responder/config/mqttTransportConfig.xml</configFilename>
+      <configFilename>/opt/argo/responder/config/mqttSenderTransportConfig.prop</configFilename>
     </transport>
     
     ...
@@ -92,19 +92,19 @@ The Argo command line client can be configured to use the MQTT Transport to send
 </client>
 ```
 
-###Configuring the MQTT Sender Tranport
-Configuring the MQTT Sender Transport is the same as configuring the MQTT Responder Transport.  Please refer to that section for configuation.
+###Configuring the MQTT Sender Transport
+Configuring the MQTT Sender Transport is the same as configuring the MQTT Responder Transport.  Please refer to that section for configuration.  Except as of this version, the sender configuration requires a properties file and not an XML file.  This will change in a future version to an XML file.
 
 ##The MQTT Repeater Probe Handler
 
 > __A Note on Repeater Probe Handlers__
 > 
-> Repeater Probe Handlers are used when you are creating a gateway between discovery domains.  The idea of a discovery domain is covered in greater detail on the main Argo wiki pages in Github.  However, in a nutshell, you use a Repeater when your probe transport needs to be bridged to another transport and/or another discovery channel.  For example, if you are doing “local” discovery using the “ws.argo/myLocalOrg/discovery’ topic on MQTT but the enterprise (or other domain) is using another topic or even another transport altogether (like Muticast), then you’d use the Repeater to get probes to publish into your discovery domain.
+> Repeater Probe Handlers are used when you are creating a gateway between discovery domains.  The idea of a discovery domain is covered in greater detail on the main Argo wiki pages in Github.  However, in a nutshell, you use a Repeater when your probe transport needs to be bridged to another transport and/or another discovery channel.  For example, if you are doing “local” discovery using the “ws.argo/myLocalOrg/discovery’ topic on MQTT but the enterprise (or other domain) is using another topic or even another transport altogether (like Multicast), then you’d use the Repeater to get probes to publish into your discovery domain.
 
 ##Configure the Argo Responder
-Adding the Probe Handler plugin to the Argo Repsonder is pretty simple.
+Adding the Probe Handler plugin to the Argo Responder is pretty simple.
 
-If you want to have your Argo Repsonder configured to handle incoming probes using and repeat them out via MQTT, you’ll need to setup Argo to use the MQTT Repeater Probe Handler plugin.  After installing the jar file and the configuration files in the appropriate places, you’ll need to edit the main `responderConfig.xml` file.
+If you want to have your Argo Responder configured to handle incoming probes using and repeat them out via MQTT, you’ll need to setup Argo to use the MQTT Repeater Probe Handler plugin.  After installing the jar file and the configuration files in the appropriate places, you’ll need to edit the main `responderConfig.xml` file.
 In the `<probeHandlers>` section, add the following transport configuration:
 
 ```xml
@@ -140,4 +140,4 @@ The configuration file for the MQTT Repeater Probe Handler looks like this:
 </mqttTransport>
 ```
 
-Curiously, it’s identical to the configuration file for the MQTT Transport.  Please refer to that section for configuation.
+Curiously, it’s identical to the configuration file for the MQTT Transport.  Please refer to that section for configuration.

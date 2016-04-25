@@ -2,133 +2,136 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ws.argo.plugin.transport.mqtt</groupId>
-    <artifactId>mqttTransportPlugin</artifactId>
-    <version>1.0.0</version>
+  <groupId>ws.argo.plugin.transport.mqtt</groupId>
+  <artifactId>mqttTransportPlugin</artifactId>
+  <version>1.0.0</version>
 
-    <licenses>
-        <license>
-            <name>GPL3 License</name>
-            <url>https://opensource.org/licenses/GPL-3.0</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+  <licenses>
+    <license>
+      <name>GPL3 License</name>
+      <url>https://opensource.org/licenses/GPL-3.0</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-    <developers>
-        <developer>
-            <id>jmsimpson68</id>
-            <name>Jeff Simpson</name>
-            <email>jmsimpson68@gmail.com</email>
-            <roles>
-                <role>Build Master</role>
-                <role>Developer</role>
-            </roles>
-        </developer>
-    </developers>
+  <developers>
+    <developer>
+      <id>jmsimpson68</id>
+      <name>Jeff Simpson</name>
+      <email>jmsimpson68@gmail.com</email>
+      <roles>
+        <role>Build Master</role>
+        <role>Developer</role>
+      </roles>
+    </developer>
+  </developers>
 
-    <repositories>
-        <repository>
-            <id>paho-mqtt-client</id>
-            <name>Paho MQTT Client</name>
-            <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
-        </repository>
-    </repositories>
+  <repositories>
+    <repository>
+      <id>paho-mqtt-client</id>
+      <name>Paho MQTT Client</name>
+      <url>https://repo.eclipse.org/content/repositories/paho-releases/</url>
+    </repository>
+  </repositories>
 
-    <properties>
-        <paho.version>1.0.2</paho.version>
-        <argo.version>0.4.1-SNAPSHOT</argo.version>
+  <properties>
+    <paho.version>1.0.2</paho.version>
+    <argo.version>0.4.1-SNAPSHOT</argo.version>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.7</maven.compiler.source>
+    <maven.compiler.target>1.7</maven.compiler.target>
 
-    </properties>
+  </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>commons-configuration</groupId>
-            <artifactId>commons-configuration</artifactId>
-            <version>1.10</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>commons-validator</groupId>
-            <artifactId>commons-validator</artifactId>
-            <version>1.4.1</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>commons-configuration</groupId>
+      <artifactId>commons-configuration</artifactId>
+      <version>1.10</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-validator</groupId>
+      <artifactId>commons-validator</artifactId>
+      <version>1.4.1</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.eclipse.paho</groupId>
-            <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
-            <version>${paho.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>ws.argo.probe</groupId>
-            <artifactId>ProbeSender</artifactId>
-            <version>${argo.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.eclipse.paho</groupId>
+      <artifactId>org.eclipse.paho.client.mqttv3</artifactId>
+      <version>${paho.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- The plugin just uses the ProbeSender as a dependency because the repeater needs the
+         ProbeSender class.  The ProbeSender depends on the PluginFramework so it's included
+         transitively.  This is just in case you were wondering why the ProbeSender was included  -->
+    <dependency>
+      <groupId>ws.argo.probe</groupId>
+      <artifactId>ProbeSender</artifactId>
+      <version>${argo.version}</version>
+    </dependency>
 
-    </dependencies>
+  </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.3</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+        </configuration>
+      </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.3</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <artifactSet>
-                                <includes>
-                                    <include>org.eclipse.paho:org.eclipse.paho.client.mqttv3</include>
-                                    <include>commons-validator:commons-validator</include>
-                                    <include>ws.argo.probe:ProbeSender</include>
-                                </includes>
-                                <excludes>
-                                    <exclude>commons-configuration:commons-configuration</exclude>
-                                </excludes>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <artifactSet>
+                <includes>
+                  <include>org.eclipse.paho:org.eclipse.paho.client.mqttv3</include>
+                  <include>commons-validator:commons-validator</include>
+                  <include>ws.argo.probe:ProbeSender</include>
+                </includes>
+                <excludes>
+                  <exclude>commons-configuration:commons-configuration</exclude>
+                </excludes>
 
-                            </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>META-INF/*.SF</exclude>
+                    <exclude>META-INF/*.DSA</exclude>
+                    <exclude>META-INF/*.RSA</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 
-        </plugins>
-    </build>
+    </plugins>
+  </build>
 
 
 </project>

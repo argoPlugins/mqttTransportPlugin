@@ -36,6 +36,7 @@ import ws.argo.wireline.probe.ProbeParseException;
 import ws.argo.wireline.probe.ProbeWrapper;
 import ws.argo.wireline.probe.XMLSerializer;
 
+import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,6 +73,15 @@ public class MqttResponderTransport implements Transport, MqttCallback {
 
         processPropertiesFile(propertiesFilename);
         createMQTTConnection();
+
+        setupReconnectTimer();
+    }
+
+    private void setupReconnectTimer() {
+
+        Timer reconnectTimer = new Timer();
+
+
     }
 
     @Override
@@ -121,7 +131,13 @@ public class MqttResponderTransport implements Transport, MqttCallback {
 
     @Override
     public void connectionLost(Throwable throwable) {
-        LOGGER.info("MQTT Transport Connection List: " + throwable.getMessage());
+        LOGGER.warning("MQTT Transport Connection Lost: " + throwable.getMessage());
+        LOGGER.info("MQTT Transport attempting to reconnect to " + _broker);
+        try {
+            createMQTTConnection();
+        } catch (TransportConfigException e) {
+            LOGGER.warning("MQTT unable to reconnect: " + throwable.getMessage());
+        }
     }
 
     @Override
